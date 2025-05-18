@@ -1,0 +1,30 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'   # Only run on version tags
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./src/ChocolateSmoke/ChocolateSmoke.csproj
+
+      - name: Build
+        run: dotnet build ./src/ChocolateSmoke/ChocolateSmoke.csproj --configuration Release
+
+      - name: Pack
+        run: dotnet pack ./src/ChocolateSmoke/ChocolateSmoke.csproj --configuration Release --no-build -o ./nupkgs
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
