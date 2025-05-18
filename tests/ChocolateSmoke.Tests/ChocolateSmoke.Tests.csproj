@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CacheOrchestrator\ChocolateSmoke.csproj" />
-  </ItemGroup>
+    <ProjectReference Include="..\..\src\ChocolateSmoke\ChocolateSmoke.csproj" />
+  </ItemGroup> 
 </Project>
